@@ -53,7 +53,7 @@ function App() {
 
 			<form
 				onSubmit={handleAnswer}
-				className="bg-gray-700 p-4 sm:p-8 rounded-lg shadow-xl w-full sm:max-w-md border border-gray-600"
+				className="bg-gray-700 p-4 sm:p-8 rounded-lg shadow-xl w-full sm:max-w-lg border border-gray-600"
 			>
 				<div className="mb-4 sm:mb-6">
 					<input
