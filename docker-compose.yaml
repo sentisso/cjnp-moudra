@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+#  nginx-proxy:
+#    image: jwilder/nginx-proxy
+#    container_name: nginx-proxy
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#      - nginx_certs:/etc/nginx/certs
+#      - nginx_vhost:/etc/nginx/vhost.d
+#      - nginx_html:/usr/share/nginx/html
+#
+#  acme-companion:
+#    image: nginxproxy/acme-companion
+#    container_name: acme-companion
+#    depends_on:
+#      - nginx-proxy
+#    volumes:
+#      - /var/run/docker.sock:/tmp/docker.sock:ro
+#      - nginx_certs:/etc/nginx/certs
+#      - nginx_vhost:/etc/nginx/vhost.d
+#      - nginx_html:/usr/share/nginx/html
+#      - acme:/etc/acme.sh
+#    environment:
+#      - DEFAULT_EMAIL=${LETSENCRYPT_EMAIL}
+
+  react-app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    environment:
+      - VIRTUAL_HOST=${APP_VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${APP_VIRTUAL_HOST}
+    ports:
+      - "${APP_PORT:-3001}:80"
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_HOST=${POSTGRES_HOST}
+      - DATABASE_PORT=5432
+      - DATABASE_USER=${POSTGRES_USER}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+      - DATABASE_NAME=${POSTGRES_DB}
+      - VIRTUAL_HOST=${SERVER_VIRTUAL_HOST}
+      - LETSENCRYPT_HOST=${SERVER_VIRTUAL_HOST}
+    depends_on:
+      - postgres
+    ports:
+      - "${SERVER_PORT:-3000}:3000"
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  nginx_certs:
+  nginx_vhost:
+  nginx_html:
+  acme:
+  postgres_data:
