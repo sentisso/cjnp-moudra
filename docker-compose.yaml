@@ -31,10 +31,11 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile
+      args:
+        REACT_APP_SERVER_URL: ${REACT_APP_SERVER_URL}
     environment:
       - VIRTUAL_HOST=${APP_VIRTUAL_HOST}
       - LETSENCRYPT_HOST=${APP_VIRTUAL_HOST}
-      - REACT_APP_SERVER_URL=${REACT_APP_SERVER_URL}
     ports:
       - "${APP_PORT:-3001}:80"
     depends_on:

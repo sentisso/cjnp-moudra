@@ -10,6 +10,10 @@ RUN npm install
 
 # Copy source files and build the React app
 COPY . .
+
+ARG REACT_APP_SERVER_URL
+ENV REACT_APP_SERVER_URL $REACT_APP_SERVER_URL
+
 RUN npm run build
 
 # Use a lightweight web server for serving static files
