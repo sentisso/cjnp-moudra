@@ -32,7 +32,7 @@ services:
       context: ./app
       dockerfile: Dockerfile
       args:
-        REACT_APP_SERVER_URL: ${REACT_APP_SERVER_URL}
+        REACT_APP_SERVER_URL: ${SERVER_VIRTUAL_HOST}
     environment:
       - VIRTUAL_HOST=${APP_VIRTUAL_HOST}
       - LETSENCRYPT_HOST=${APP_VIRTUAL_HOST}
@@ -46,6 +46,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     environment:
+      - CORS_ORIGIN=${APP_VIRTUAL_HOST}
       - DATABASE_HOST=${POSTGRES_HOST}
       - DATABASE_PORT=5432
       - DATABASE_USER=${POSTGRES_USER}

@@ -5,6 +5,12 @@ import { SwaggerTheme, SwaggerThemeNameEnum } from 'swagger-themes';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+	app.enableCors({
+		origin: process.env.CORS_ORIGIN ?? '*',
+		methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+		preflightContinue: false,
+		optionsSuccessStatus: 204,
+	});
 
 	const config = new DocumentBuilder()
 		.setTitle('Scentia API')
