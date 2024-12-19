@@ -46,7 +46,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     environment:
-#      - CORS_ORIGIN=${APP_VIRTUAL_HOST}
+      - CORS_ORIGIN=${APP_VIRTUAL_HOST}
       - DATABASE_HOST=${POSTGRES_HOST}
       - DATABASE_PORT=5432
       - DATABASE_USER=${POSTGRES_USER}
